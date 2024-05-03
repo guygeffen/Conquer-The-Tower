@@ -1,0 +1,27 @@
+<resources>
+    <string name="app_name">Conquer the tower</string>
+    <string name="action_settings">Settings</string>
+	<string name="btn_statistics">Statistics</string>
+	<string name="btn_safety_instuctions">Safety Instructions</string>
+	<string name="btn_user_profile">User Profile</string>
+	<string name="btn_new_game">New Game</string>
+	<string name="user_information_title">User Information</string>
+	<string name="name_hint">Enter your full name</string>
+	<string name="date_of_birth_label">Date of Birth:</string>
+	<string name="gender_label">Gender:</string>
+	<string name="weight_label">Weight (KG):</string>
+	<string name="save_button">Save</string>
+	<string name="back_button">Back</string>
+	<string name="gender_male">Male</string>
+	<string name="gender_female">Female</string>
+	<string name="gender_other">Other</string>
+	<string name="btn_aim">Aim</string>
+	<string name="btn_pause">Pause</string>
+	<string name="btn_stop">Stop</string>
+	<string name="btn_start_game">Start Game</string>
+	<string name="game_radius_label">Game Radius(meters):</string>
+	<string name="game_time_label">Game Time(minutes):</string>
+	<string name="num_of_towers_label">Number of Towers:</string>
+	<string name="new_game_settings_label">New Game Settings</string>
+	
+</resources>
