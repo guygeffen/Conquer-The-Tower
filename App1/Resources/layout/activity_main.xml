@@ -48,7 +48,8 @@
             android:layout_marginLeft="@dimen/design_bottom_navigation_margin"
             android:layout_marginRight="@dimen/design_bottom_navigation_margin"
             android:layout_marginTop="@dimen/design_bottom_navigation_margin"
-            android:layout_marginStart="@dimen/design_bottom_navigation_margin" />
+            android:layout_marginStart="@dimen/design_bottom_navigation_margin"
+            android:textAllCaps="false"/>
         <Button
             android:text="@string/btn_new_game"
             android:layout_width="match_parent"
@@ -58,8 +59,8 @@
             android:layout_marginRight="@dimen/design_bottom_navigation_margin"
             android:layout_marginTop="@dimen/design_bottom_navigation_margin"
             android:layout_marginStart="@dimen/design_bottom_navigation_margin"
-            android:importantForAccessibility="auto"
             android:textAllCaps="false" />
+        <!--
         <Button
             android:text="@string/btn_statistics"
             android:layout_width="match_parent"
@@ -69,9 +70,7 @@
             android:layout_marginRight="@dimen/design_bottom_navigation_margin"
             android:layout_marginTop="@dimen/design_bottom_navigation_margin"
             android:layout_marginStart="@dimen/design_bottom_navigation_margin"
-            android:importantForAccessibility="auto"
-            android:textAllCaps="false"
-            android:importantForAutofill="auto" />
+            android:textAllCaps="false"/>
         <Button
             android:text="@string/btn_safety_instuctions"
             android:layout_width="match_parent"
@@ -81,9 +80,10 @@
             android:layout_marginRight="@dimen/design_bottom_navigation_margin"
             android:layout_marginTop="@dimen/design_bottom_navigation_margin"
             android:layout_marginStart="@dimen/design_bottom_navigation_margin"
-            android:importantForAccessibility="@dimen/design_bottom_navigation_margin"
+            android:importantForAccessibility="auto"
             android:textAllCaps="false"
             android:importantForAutofill="auto" />
+        -->
     </LinearLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

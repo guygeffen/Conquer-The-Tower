@@ -14,18 +14,19 @@ namespace CttApp
             _databasePath = Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal), "conquer_the_tower_app.db");
             
             _db = new SQLiteConnection(_databasePath); // Use CreateIfNotExists flag
-            //_db.GetTableInfo()
             // Check if table exists before creating it
-            if (_db.GetMapping<UserProfile>()==null)
-            {
-                _db.CreateTable<UserProfile>();
-            }
+
+            CreateTableResult t_result=_db.CreateTable<UserProfile>();
+
+            
         }
 
         public void SaveUserProfile(UserProfile profile)
         {
-            // Update the profile if it already exists, otherwise insert a new one
-            if (_db.Table<UserProfile>().Where(x => x.Name == profile.Name).First()!=null) // Check if a profile with the same name exists
+            // Check if a profile with the same name exists (returns null if none found)
+            var existingProfile = _db.Table<UserProfile>().FirstOrDefault(x => x.Name == profile.Name);
+
+            if (existingProfile != null)
             {
                 _db.Update(profile);
             }
@@ -34,6 +35,8 @@ namespace CttApp
                 _db.Insert(profile);
             }
         }
+
+
 
         public UserProfile GetUserProfile()
         {

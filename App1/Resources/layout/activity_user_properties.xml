@@ -1,86 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent">
+
+  <LinearLayout
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="@dimen/margin_medium">
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/user_information_title" 
-        android:textAppearance="@style/custom_text_headline"/>
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="@string/user_information_title"
+      android:textAppearance="@style/custom_text_headline"/>
 
     <EditText
-        android:id="@+id/txtName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/name_hint"
-        android:inputType="textPersonName" />
+      android:id="@+id/txtName"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:hint="@string/name_hint"
+      android:inputType="textPersonName" />
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/date_of_birth_label" />
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="@string/date_of_birth_label" />
 
     <DatePicker
-        android:id="@+id/datePicker"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+      android:id="@+id/datePicker"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content" />
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/gender_label" />
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="@string/gender_label" />
 
     <RadioGroup
-        android:id="@+id/radioGroupGender"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+      android:id="@+id/radioGroupGender"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content">
 
-        <RadioButton
-            android:id="@+id/radioButtonMale"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/gender_male" />
+      <RadioButton
+        android:id="@+id/radioButtonMale"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/gender_male" />
 
-        <RadioButton
-            android:id="@+id/radioButtonFemale"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/gender_female" />
+      <RadioButton
+        android:id="@+id/radioButtonFemale"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/gender_female" />
 
-        <RadioButton
-            android:id="@+id/radioButtonOther"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:text="@string/gender_other"/>
+      <RadioButton
+        android:id="@+id/radioButtonOther"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/gender_other"/>
     </RadioGroup>
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/weight_label" />
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="@string/weight_label" />
 
     <EditText
-        android:id="@+id/txtWeight"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="numberDecimal"
-        android:digits="0.0-9" />
+      android:id="@+id/txtWeight"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:inputType="numberDecimal"
+      android:digits="0.0-9" />
 
     <Button
-        android:id="@+id/btnSave"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_medium"
-        android:text="@string/save_button" />
+      android:id="@+id/btnSave"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="@dimen/margin_medium"
+      android:text="@string/save_button" />
 
     <Button
-        android:id="@+id/btnBack"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_medium"
-        android:text="@string/back_button" />
+      android:id="@+id/btnBack"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="@dimen/margin_medium"
+      android:text="@string/back_button" />
 
-</LinearLayout>
+  </LinearLayout>
+</ScrollView>

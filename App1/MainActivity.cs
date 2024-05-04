@@ -16,6 +16,8 @@ namespace CttApp
     public class MainActivity : AppCompatActivity
     {
         private const int UserProfileRequestCode = 1; // Request code for UserProfileActivity
+        private const int NewGameRequestCode = 2; // Request code for NewGameActivity
+        private const int PlayGameRequestCode = 3; // Request code for UserProfileActivity
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
@@ -30,6 +32,23 @@ namespace CttApp
 
             // Assign a click handler to the button
             userPropButton.Click += UserPropButton_Click;
+
+            // Find the button with ID "userPropButton"
+            Button newGameButton = FindViewById<Button>(Resource.Id.newGameButton);
+
+            // Assign a click handler to the button
+            newGameButton.Click += NewGameButton_Click;
+
+
+        }
+
+        private void NewGameButton_Click(object sender, EventArgs e)
+        {
+            // Create an Intent to launch NewGameActivity
+            Intent intent = new Intent(this, typeof(NewGameActivity));
+
+            // Start the activity for result
+            StartActivityForResult(intent, NewGameRequestCode);
         }
 
         private void UserPropButton_Click(object sender, EventArgs e)
@@ -54,6 +73,13 @@ namespace CttApp
                 {
                     Toast.MakeText(this, message, ToastLength.Short).Show();
                 }
+            }
+
+            if (requestCode == NewGameRequestCode && resultCode == Result.Ok)
+            {
+                // Handle potential data returned by NewActivity
+                // (e.g., display a message or update UI based on saved information)
+                StartActivityForResult(data, PlayGameRequestCode);
             }
         }
 
