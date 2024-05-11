@@ -68,11 +68,13 @@
     <Reference Include="System.Numerics" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ElevationService.cs" />
     <Compile Include="HitResult.cs" />
     <Compile Include="Entity.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="Location.cs" />
     <Compile Include="MainActivity.cs" />
+    <Compile Include="MapHelper.cs" />
     <Compile Include="NewGameActivity.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="PlayGameActivity.cs" />
@@ -128,6 +130,9 @@
   <ItemGroup>
     <PackageReference Include="sqlite-net-pcl">
       <Version>1.9.172</Version>
+    </PackageReference>
+    <PackageReference Include="System.Text.Json">
+      <Version>8.0.3</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.AndroidX.AppCompat" Version="1.2.0.5" />
     <PackageReference Include="Xamarin.Forms">

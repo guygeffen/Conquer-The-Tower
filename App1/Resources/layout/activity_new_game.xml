@@ -44,12 +44,12 @@
         android:text="@string/game_radius_label"
         android:layout_weight="1" />
 
-    <EditText
-        android:id="@+id/gameRadiusInput"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:inputType="numberDecimal"
-        android:layout_weight="1" />
+        <EditText
+            android:id="@+id/gameRadiusInput"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:layout_weight="1" />
 
   </LinearLayout>
 
@@ -64,12 +64,12 @@
         android:text="@string/game_time_label"
         android:layout_weight="1" />
 
-    <EditText
-        android:id="@+id/gameTimeInput"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:inputType="numberDecimal"
-        android:layout_weight="1" />
+        <EditText
+            android:id="@+id/gameTimeInput"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:layout_weight="1" />
 
   </LinearLayout>
 

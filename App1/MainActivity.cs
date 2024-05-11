@@ -9,6 +9,10 @@ using Google.Android.Material.FloatingActionButton;
 using Google.Android.Material.Snackbar;
 using Android.Widget;
 using Android.Content;
+using AndroidX.Core.Content;
+using Android;
+using Android.Content.PM;
+using AndroidX.Core.App;
 
 namespace CttApp
 {
@@ -18,14 +22,14 @@ namespace CttApp
         private const int UserProfileRequestCode = 1; // Request code for UserProfileActivity
         private const int NewGameRequestCode = 2; // Request code for NewGameActivity
         private const int PlayGameRequestCode = 3; // Request code for UserProfileActivity
+        private const int MY_PERMISSIONS_REQUEST_LOCATION = 1000;
+
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
             //Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             SetContentView(Resource.Layout.activity_main);
 
-            FloatingActionButton fab = FindViewById<FloatingActionButton>(Resource.Id.fab);
-            fab.Click += FabOnClick;
 
             // Find the button with ID "userPropButton"
             Button userPropButton = FindViewById<Button>(Resource.Id.userPropButton);
@@ -39,6 +43,11 @@ namespace CttApp
             // Assign a click handler to the button
             newGameButton.Click += NewGameButton_Click;
 
+            //check location permission
+            if (!CheckLocationPermissions())
+            {
+                RequestLocationPermissions();
+            }
 
         }
 
@@ -101,12 +110,74 @@ namespace CttApp
             return base.OnOptionsItemSelected(item);
         }
 
-        private void FabOnClick(object sender, EventArgs eventArgs)
+       
+        private bool CheckLocationPermissions()
         {
-            View view = (View) sender;
-            Snackbar.Make(view, "Replace with your own action", Snackbar.LengthLong)
-                .SetAction("Action", (View.IOnClickListener)null).Show();
+            return ContextCompat.CheckSelfPermission(this, Manifest.Permission.AccessFineLocation) == (int)Permission.Granted &&
+                   ContextCompat.CheckSelfPermission(this, Manifest.Permission.AccessCoarseLocation) == (int)Permission.Granted;
         }
+
+        private void RequestLocationPermissions()
+        {
+            if (ActivityCompat.ShouldShowRequestPermissionRationale(this, Manifest.Permission.AccessFineLocation))
+            {
+                // Show an explanation to the user asynchronously
+                AndroidX.AppCompat.App.AlertDialog.Builder alert = new AndroidX.AppCompat.App.AlertDialog.Builder(this);
+                alert.SetTitle("Location Permission Needed");
+                alert.SetMessage("This app needs location permissions to function properly.");
+                alert.SetPositiveButton("OK", (senderAlert, args) =>
+                {
+                    ActivityCompat.RequestPermissions(this,
+                        new String[] { Manifest.Permission.AccessFineLocation, Manifest.Permission.AccessCoarseLocation },
+                        MY_PERMISSIONS_REQUEST_LOCATION);
+                });
+                alert.Show();
+            }
+            else
+            {
+                // No explanation needed, we can request the permission.
+                ActivityCompat.RequestPermissions(this,
+                    new String[] { Manifest.Permission.AccessFineLocation, Manifest.Permission.AccessCoarseLocation },
+                    MY_PERMISSIONS_REQUEST_LOCATION);
+            }
+        }
+
+        private void ShowSettingsAlert()
+        {
+            AndroidX.AppCompat.App.AlertDialog.Builder alertDialog = new AndroidX.AppCompat.App.AlertDialog.Builder(this);
+            alertDialog.SetTitle("Permission Required");
+            alertDialog.SetMessage("This app needs location permissions to function. Please enable them in settings.");
+            alertDialog.SetPositiveButton("Settings", delegate
+            {
+                Intent intent = new Intent(Android.Provider.Settings.ActionApplicationDetailsSettings,
+                Android.Net.Uri.FromParts("package", PackageName, null));
+                intent.AddFlags(ActivityFlags.NewTask);
+                StartActivity(intent);
+            });
+            alertDialog.SetNegativeButton("Cancel", delegate
+            {
+                alertDialog.Dispose();
+            });
+            alertDialog.Show();
+        }
+
+        public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Permission[] grantResults)
+        {
+            base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+            if (requestCode == MY_PERMISSIONS_REQUEST_LOCATION)
+            {
+                if (grantResults.Length > 0 && grantResults[0] == Permission.Granted)
+                {
+                    // Permission was granted.
+                }
+                else
+                {
+                    // Permission denied.
+                    ShowSettingsAlert(); // Prompt user to go to settings if needed
+                }
+            }
+        }
+
 
         /*public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Android.Content.PM.Permission[] grantResults)
         {
@@ -116,6 +187,6 @@ namespace CttApp
            
         }*/
 
-       
-	}
+
+    }
 }

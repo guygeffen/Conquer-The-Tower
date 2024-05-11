@@ -1,6 +1,7 @@
 ﻿
 
 using System;
+using System.Collections.Generic;
 
 namespace CttApp
 {
@@ -22,43 +23,50 @@ namespace CttApp
             return ownerLocation.DistanceTo(targetLocation) <= Range;
         }
 
-        public HitResult Fire(Entity target, Location ownerLocation, Shell shell)
+
+        public List<HitResult> Fire( List<Entity> targets, Location ownerLocation, Shell shell)
         {
-            if (!IsInRange(target.Location, ownerLocation))
+            List<HitResult> hitResults = new List<HitResult>();
+            double gravity = 9.81; // Acceleration due to gravity in m/s^2
+            double timeIncrement = 0.1; // Time step for simulation in seconds
+
+            // Initial velocity Azimuth
+            double velocityX = shell.InitialSpeed * Math.Cos(Inclination * Math.PI / 180) * Math.Sin(Azimuth * Math.PI / 180);
+            double velocityY = shell.InitialSpeed * Math.Sin(Inclination * Math.PI / 180);
+            double velocityZ = shell.InitialSpeed * Math.Cos(Inclination * Math.PI / 180) * Math.Cos(Azimuth * Math.PI / 180);
+
+            // Simulate the flight of the shell
+            double time = 0;
+            Location projectileLocation = new Location(ownerLocation.Latitude, ownerLocation.Longitude, ownerLocation.Altitude);
+            bool hitDetected = false;
+
+            while (projectileLocation.Altitude > 0 && !hitDetected)
             {
-                return new HitResult(false, 0); // Out of range, no hit
+                time += timeIncrement;
+                projectileLocation.Latitude += velocityX * timeIncrement;
+                projectileLocation.Longitude += velocityZ * timeIncrement;
+                projectileLocation.Altitude += velocityY * timeIncrement - 0.5 * gravity * time * time; // Updating altitude with vertical displacement due to gravity
+
+                foreach (var target in targets)
+                {
+                    double distanceToTarget = projectileLocation.DistanceTo(target.Location);
+                    if (distanceToTarget <= shell.DamageRadius)
+                    {
+                        double damage = shell.GetImpactDamage(distanceToTarget);
+                        target.TakeDamage(damage);
+                        hitResults.Add(new HitResult(true, damage, target));
+                        hitDetected = true;
+                    }
+                }
             }
 
-            // Calculate initial velocity components based on weapon aim and shell speed
-            double initialSpeed = shell.InitialSpeed; // Meters per second
-            double velocityX = initialSpeed * Math.Cos(Inclination * (Math.PI / 180)) * Math.Cos(Azimuth * (Math.PI / 180));
-            double velocityY = initialSpeed * Math.Sin(Inclination * (Math.PI / 180));
-            double velocityZ = initialSpeed * Math.Sin(Azimuth * (Math.PI / 180));
-
-            // Simulate ballistic trajectory using shell properties and initial velocity (replace with your implementation)
-            double distance = target.Location.DistanceTo(ownerLocation);
-            double flightTime = distance / Math.Sqrt(Math.Pow(velocityX, 2) + Math.Pow(velocityY, 2)); // Flight time considering x and y components
-
-            // Consider gravity (replace with more precise physics calculations)
-            double gravity = 9.81; // Meters per second squared
-            double verticalDisplacement = 0.5 * gravity * Math.Pow(flightTime, 2); // Simplified vertical displacement
-
-            // Calculate target position based on initial velocity and flight time
-            double targetX = ownerLocation.Latitude + velocityX * flightTime;
-            double targetY = ownerLocation.Longitude + velocityY * flightTime;
-
-            // Check if target position is within a hit radius
-            double hitRadius = shell.DamageRadius; // Meters
-            double distanceToTarget = Math.Sqrt(Math.Pow(ownerLocation.Latitude - targetX, 2) + Math.Pow(ownerLocation.Longitude - targetY, 2));
-            bool isHit = distanceToTarget <= hitRadius;
-
-            if (isHit)
+            if (!hitDetected)
             {
-                target.TakeDamage(shell.GetImpactDamage(distanceToTarget)); // Damage based on distance
+                hitResults.Add(new HitResult(false, 0));
             }
 
-            return new HitResult(isHit, isHit ? shell.GetImpactDamage(distanceToTarget) : 0);
+            return hitResults;
         }
     }
-
+  
 }

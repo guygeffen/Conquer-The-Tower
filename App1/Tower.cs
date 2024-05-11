@@ -1,5 +1,6 @@
 ﻿
 using System;
+using System.Collections.Generic;
 
 namespace CttApp
 {
@@ -42,8 +43,11 @@ namespace CttApp
                 }
                 else
                 {
+
+                    List<Entity> targets = new List<Entity>();
+                    targets.Add(player);
                     // Weapon aimed, fire at player
-                    Weapon.Fire(player, Location, new Shell());
+                    Weapon.Fire(targets, Location, new Shell());
                     _lastAimTime = DateTime.UtcNow; // Update last aiming time
                 }
             }
