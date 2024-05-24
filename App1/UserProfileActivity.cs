@@ -15,9 +15,10 @@ namespace CttApp
     public class UserProfileActivity : Activity
     {
         private EditText txtName;
-        private DatePicker datePicker;
+        private EditText txtAge;
         private RadioGroup radioGroupGender;
         private EditText txtWeight;
+        private EditText txtHeight;
         private UserProfileDbHelper _dbHelper;
 
         protected override void OnCreate(Bundle savedInstanceState)
@@ -29,23 +30,24 @@ namespace CttApp
 
             // Get references to UI elements
             txtName = FindViewById<EditText>(Resource.Id.txtName);
-            datePicker = FindViewById<DatePicker>(Resource.Id.datePicker);
+            txtAge = FindViewById<EditText>(Resource.Id.txtAge);
             radioGroupGender = FindViewById<RadioGroup>(Resource.Id.radioGroupGender);
             txtWeight = FindViewById<EditText>(Resource.Id.txtWeight);
+            txtHeight = FindViewById<EditText>(Resource.Id.txtHeight);
 
             // Set weight input to accept decimals with one digit after the point
             txtWeight.InputType = Android.Text.InputTypes.ClassNumber;
             //txtWeight.v = "0.0-9";
 
             // Initialize database helper
-            _dbHelper = new UserProfileDbHelper();
+            _dbHelper = UserProfileDbHelper.GetInstance();
 
             // Load existing user data and populate UI (if any)
             UserProfile profile = _dbHelper.GetUserProfile();
             if (profile != null)
             {
                 txtName.Text = profile.Name;
-                datePicker.UpdateDate(profile.DateOfBirth.Year, profile.DateOfBirth.Month - 1, profile.DateOfBirth.Day); // Adjust month for DatePicker
+                txtAge.Text=profile.Age.ToString(); 
 
                 int checkedRadioButtonId;
                 if (profile.Gender == "Female")
@@ -63,6 +65,7 @@ namespace CttApp
                 radioGroupGender.Check(checkedRadioButtonId);
 
                 txtWeight.Text = profile.Weight.ToString();
+                txtHeight.Text = profile.Height.ToString();
             }
 
             // Add button to save data
@@ -78,7 +81,7 @@ namespace CttApp
         {
             // Get user input
             string name = txtName.Text;
-            DateTime dateOfBirth = new DateTime(datePicker.Year, datePicker.Month + 1, datePicker.DayOfMonth); // Adjust month for DateTime
+            int age = int.Parse(txtAge.Text);
             string gender = "";
             int checkedRadioButtonId = radioGroupGender.CheckedRadioButtonId;
             if (checkedRadioButtonId == Resource.Id.radioButtonMale)
@@ -94,9 +97,10 @@ namespace CttApp
                 gender = "Other";
             }
             double weight = double.Parse(txtWeight.Text);
+            int height = int.Parse(txtHeight.Text);
 
             // Create a user profile object
-            UserProfile profile = new UserProfile(name, dateOfBirth, gender, weight);
+            UserProfile profile = new UserProfile(name, age, gender, weight, height);
 
             // Save user profile to database
             _dbHelper.SaveUserProfile(profile);

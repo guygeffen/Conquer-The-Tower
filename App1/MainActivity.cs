@@ -23,6 +23,7 @@ namespace CttApp
         private const int NewGameRequestCode = 2; // Request code for NewGameActivity
         private const int PlayGameRequestCode = 3; // Request code for UserProfileActivity
         private const int MY_PERMISSIONS_REQUEST_LOCATION = 1000;
+       
 
         protected override void OnCreate(Bundle savedInstanceState)
         {

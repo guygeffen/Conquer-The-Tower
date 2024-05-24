@@ -47,14 +47,14 @@ namespace CttApp
         {
             string requestUri = $"https://maps.googleapis.com/maps/api/elevation/json?locations={latitude},{longitude}&key={apiKey}";
 
-            HttpResponseMessage response = await httpClient.GetAsync(requestUri);
+           /* HttpResponseMessage response = await httpClient.GetAsync(requestUri);
             if (response.IsSuccessStatusCode)
             {
                 string json = await response.Content.ReadAsStringAsync();
                 try
                 {
                     var elevationResult = JsonSerializer.Deserialize<ElevationResponse>(json);
-                    return elevationResult?.results[0]?.elevation;
+                    return elevationResult?.results[0]?.Elevation;
                 }
                 catch (JsonException e)
                 {
@@ -65,7 +65,7 @@ namespace CttApp
             {
                 Console.WriteLine($"HTTP Error: {response.StatusCode}");
             }
-            return null;
+            */return null;
         }
 
         public class ElevationResponse
@@ -75,7 +75,7 @@ namespace CttApp
 
         public class ElevationResult
         {
-            public double elevation { get; set; }
+            public double Elevation { get; set; }
         }
     }
 }

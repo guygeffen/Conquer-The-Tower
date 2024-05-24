@@ -9,7 +9,8 @@ public static class MapHelper
     public static float EstimateZoomLevel(double radiusMeters)
     {
         // Get the screen width in pixels
-        var screenWidth = DeviceDisplay.MainDisplayInfo.Width / DeviceDisplay.MainDisplayInfo.Density;
+        var screenWidth = 2341.95; // calculated manually for s24//DeviceDisplay.MainDisplayInfo.Width / DeviceDisplay.MainDisplayInfo.Density;
+
 
         // Assume the radius should cover half the screen width
         double metersPerPixel = radiusMeters / (screenWidth / 2);

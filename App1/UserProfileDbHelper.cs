@@ -8,8 +8,9 @@ namespace CttApp
     {
         private static string _databasePath;
         private SQLiteConnection _db;
+        private static UserProfileDbHelper instance;
 
-        public UserProfileDbHelper()
+        private UserProfileDbHelper()
         {
             _databasePath = Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal), "conquer_the_tower_app.db");
             
@@ -19,6 +20,15 @@ namespace CttApp
             CreateTableResult t_result=_db.CreateTable<UserProfile>();
 
             
+        }
+
+        public static UserProfileDbHelper GetInstance() 
+        {
+            if(instance== null)
+            {
+                instance = new UserProfileDbHelper();
+            }
+            return instance;
         }
 
         public void SaveUserProfile(UserProfile profile)

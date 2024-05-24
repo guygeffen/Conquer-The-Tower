@@ -7,9 +7,10 @@
 	<string name="btn_new_game">New Game</string>
 	<string name="user_information_title">User Information</string>
 	<string name="name_hint">Enter your full name</string>
-	<string name="date_of_birth_label">Date of Birth:</string>
+	<string name="date_of_birth_label">Age (Years):</string>
 	<string name="gender_label">Gender:</string>
 	<string name="weight_label">Weight (KG):</string>
+	<string name="height_label">Height (CM):</string>
 	<string name="save_button">Save</string>
 	<string name="back_button">Back</string>
 	<string name="gender_male">Male</string>
