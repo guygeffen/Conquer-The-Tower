@@ -6,8 +6,8 @@ namespace CttApp
     public class Player : Entity
     {
         public UserProfile User { get; private set; }
-        private CalorieCalculator calorieCalculator;
-        private Location lastLocactionForCalorie;
+        private readonly CalorieCalculator calorieCalculator;
+      
         private long lastUpdate = 0;
         public double CaloriesBurned { get; private set; }
         // Additional player-specific properties or methods (e.g., movement)
@@ -16,7 +16,7 @@ namespace CttApp
             User = user;
             calorieCalculator = new CalorieCalculator(user);
             CaloriesBurned = 0;
-            lastLocactionForCalorie = location;
+           
         }
 
         protected override void LocationChanged(Location oldLocation, Location newLocation)

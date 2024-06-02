@@ -16,13 +16,13 @@ public class CalorieCalculator
     // Calculate calories burned during rest for a given duration
     public double CalculateRestingCalories(int restingSeconds)
     {
-        double dailyRestingCalories = CalculateRestingCalories();  // Daily resting calories
+        double dailyRestingCalories = CalculateDailyRestingCalories();  // Daily resting calories
         double restingCaloriesPerSecond = dailyRestingCalories / 86400;  // Convert daily calories to per second
         return restingCaloriesPerSecond * restingSeconds;  // Total resting calories over the specified period
     }
 
     // Calculate resting metabolic rate (BMR) calories per day
-    private double CalculateRestingCalories()
+    private double CalculateDailyRestingCalories()
     {
         // BMR calculation based on Mifflin-St Jeor Equation
         if (User.Gender.ToLower() == "male")

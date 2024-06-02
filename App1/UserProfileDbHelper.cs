@@ -7,7 +7,7 @@ namespace CttApp
     public class UserProfileDbHelper
     {
         private static string _databasePath;
-        private SQLiteConnection _db;
+        private readonly SQLiteConnection _db;
         private static UserProfileDbHelper instance;
 
         private UserProfileDbHelper()

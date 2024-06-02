@@ -21,6 +21,7 @@ namespace CttApp
 
         public string Name { get; private set; }
 
+
         
 
         protected virtual void LocationChanged (Location oldLocation, Location newLocation)
@@ -55,8 +56,13 @@ namespace CttApp
 
         public override string ToString()
         {
-            return $"<b>Health</b> {Health}<br>" +
-                   $"<b>Weapon</b> {Weapon}";
+            return $"<b>Health:</b> {(int)Health}<br>" +
+                   $"<b>Weapon:</b><br> {Weapon}";
+        }
+
+        public bool IsDead()
+        {
+            return Health <= 0;
         }
     }
 }

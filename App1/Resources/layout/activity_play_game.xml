@@ -25,9 +25,13 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Player Health: "
+                android:text="Health:"
                 android:textColor="@android:color/white"
-                android:gravity="center" />
+                 android:textSize="12dp"
+                android:gravity="center"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:minWidth="70dp" />
 
             <TextView
                 android:id="@+id/playerHealth"
@@ -36,16 +40,21 @@
                 android:layout_weight="1"
                 android:text="100"
                 android:textColor="@android:color/white"
-                android:gravity="center" />
+                android:gravity="center"
+                android:minWidth="40dp" />
 
             <TextView
                 android:id="@+id/towerHealthLabel"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Towers Health: "
+                android:text="Towers:"
                 android:textColor="@android:color/white"
-                android:gravity="center" />
+                android:textSize="12dp"
+                android:gravity="center"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:minWidth="70dp" />
 
             <TextView
                 android:id="@+id/towerHealth"
@@ -54,64 +63,61 @@
                 android:layout_weight="1"
                 android:text="100"
                 android:textColor="@android:color/white"
-                android:gravity="center" />
+                android:gravity="center"
+                android:minWidth="40dp" />
 
             <TextView
                 android:id="@+id/caloriesBurnedLabel"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Calories: "
+                android:text="Calories:"
                 android:textColor="@android:color/white"
-                android:gravity="center" />
+                android:textSize="12dp"
+                android:gravity="center"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:minWidth="70dp" />
 
             <TextView
                 android:id="@+id/caloriesBurned"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="150"
+                android:text="0"
                 android:textColor="@android:color/white"
-                android:gravity="center" />
+                android:gravity="center"
+                android:minWidth="40dp" />
         </LinearLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/shootButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center"
+        android:layout_margin="@dimen/fab_margin"
+        android:src="@drawable/cannon_shoot" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/aimButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|right"
+        android:layout_margin="@dimen/fab_margin"
+        app:srcCompat="@android:drawable/ic_menu_mylocation" />
+
    
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/shootButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center|right"
-            android:layout_margin="@dimen/fab_margin"
-            app:srcCompat="@drawable/ic_crosshair" />
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/stopButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|left"
+        android:layout_margin="@dimen/fab_margin"
+        app:srcCompat="@android:drawable/ic_delete" />
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/aimButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|right"
-            android:layout_margin="@dimen/fab_margin"
-            app:srcCompat="@android:drawable/ic_menu_mylocation" />
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/pauseButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|center"
-            android:layout_margin="@dimen/fab_margin"
-            app:srcCompat="@android:drawable/ic_media_pause" />
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/stopButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|left"
-            android:layout_margin="@dimen/fab_margin"
-            app:srcCompat="@android:drawable/ic_delete" />
-    
-
-    <LinearLayout 
+    <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -132,7 +138,7 @@
             android:id="@+id/timeLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Time Left: 00:00"
+            android:text="Time Left: 00:00:00"
             android:textAlignment="center"
             android:layout_marginTop="10dp" />
     </LinearLayout>

@@ -19,11 +19,13 @@ namespace CttApp
         private EditText numTowersInput;
         private EditText gameRadiusInput;
         private EditText gameTimeInput;
+        private EditText rangeInput;
         private Button startGameButton;
         private Button cancelButton;
         public const string num_towers_key = "NumTowers";
         public const string game_radius_key = "GameRadius";
         public const string game_time_key = "GameTime";
+        public const string range_key = "Range";
 
         protected override void OnCreate(Bundle savedInstanceState)
         {
@@ -38,7 +40,7 @@ namespace CttApp
             gameTimeInput = FindViewById<EditText>(Resource.Id.gameTimeInput);
             startGameButton = FindViewById<Button>(Resource.Id.startGameButton);
             cancelButton = FindViewById<Button>(Resource.Id.cancelButton);
-            
+            rangeInput = FindViewById<EditText>(Resource.Id.rangeinput);
 
             // Start game button click handler
             startGameButton.Click += OnStartGameButtonClicked;
@@ -55,19 +57,18 @@ namespace CttApp
 
         private void OnStartGameButtonClicked(object sender, EventArgs e)
         {
-            int numTowers;
-            int gameRadius;
-            int gameTime;
-
+            
             // Validate and parse user input
-            if (int.TryParse(numTowersInput.Text, out numTowers) &&
-                int.TryParse(gameRadiusInput.Text, out gameRadius) &&
-                int.TryParse(gameTimeInput.Text, out gameTime))
+            if (int.TryParse(numTowersInput.Text, out int numTowers) &&
+                int.TryParse(gameRadiusInput.Text, out int gameRadius) &&
+                int.TryParse(gameTimeInput.Text, out int gameTime) &&  
+                int.TryParse(rangeInput.Text, out int rangeinput))
             {
                 Intent intent = new Intent(this, typeof(PlayGameActivity));
                 intent.PutExtra(num_towers_key, numTowers);
                 intent.PutExtra(game_radius_key, gameRadius);
                 intent.PutExtra(game_time_key, gameTime);
+                intent.PutExtra(range_key, rangeinput);
                 SetResult(Result.Ok, intent); // Set result code and data (optional)
                 Finish(); // Close this activity
             }

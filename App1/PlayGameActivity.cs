@@ -23,7 +23,7 @@ namespace CttApp
         private GoogleMap googleMap;
         private FloatingActionButton shootButton;
         private FloatingActionButton aimButton;
-        private FloatingActionButton pauseButton;
+        
         private FloatingActionButton stopButton;
         private TextView timeLabel;
         private TextView playersHealth;
@@ -51,7 +51,7 @@ namespace CttApp
             InitializeViews(savedInstanceState);
             InitializeMap();
             locationManager = (LocationManager)GetSystemService(LocationService);
-            countDownTimer = new GamePlayCountDownCounter(Intent.GetIntExtra(NewGameActivity.game_time_key, 5) * 60000, 1000, this);
+            countDownTimer = new GamePlayCountDownCounter(Intent.GetIntExtra(NewGameActivity.game_time_key, 5) * 60000, (long)GameConstants.towerAimingTime*1000, this);
             View rootView = FindViewById(Android.Resource.Id.Content);
             InitializeSnackbar(rootView);
 
@@ -60,7 +60,7 @@ namespace CttApp
 
         private void InitializeSnackbar(View rootView)
         {
-            snackbar = Snackbar.Make(rootView, "Waiting for location...", Snackbar.LengthIndefinite);
+            snackbar = Snackbar.Make(rootView, "Waiting for GPS Signal...", Snackbar.LengthIndefinite);
             snackbar.Show(); // Show the snackbar indefinitely
         }
         void RequestLocationUpdates()
@@ -101,13 +101,14 @@ namespace CttApp
         {
 
             LatLng newLatLng = new LatLng(location.Latitude, location.Longitude);
-            Location centerLocation = new Location(location.Latitude, location.Longitude, location.Altitude);
+            Location centerLocation = new Location(location.Latitude, location.Longitude);
 
             UserProfile user=UserProfileDbHelper.GetInstance().GetUserProfile();
 
-            Task<Game> task = Game.CreateAsync(centerLocation, 100, user, Intent.GetIntExtra(NewGameActivity.num_towers_key, 1),
-                           Intent.GetIntExtra(NewGameActivity.game_radius_key, 500), Intent.GetIntExtra(NewGameActivity.game_time_key, 5));
-            this.game = task.Result;
+            this.game = Game.Create(centerLocation, GameConstants.PlayerHealth, user, Intent.GetIntExtra(NewGameActivity.num_towers_key, 1),
+                           Intent.GetIntExtra(NewGameActivity.game_radius_key, 500), Intent.GetIntExtra(NewGameActivity.game_time_key, 5),
+                           Intent.GetIntExtra(NewGameActivity.range_key, 5));
+            
             List<Tower> towers = game.GetTowers();
 
 
@@ -121,8 +122,8 @@ namespace CttApp
 
             foreach (Tower tower in towers)
             {
-                Location towerLocation = tower.Location;
-                LatLng towerLatLng = new LatLng(towerLocation.Latitude, towerLocation.Longitude);
+                
+                LatLng towerLatLng = tower.Location.GetLatLng(); 
                 Marker marker = googleMap.AddMarker(new MarkerOptions().SetPosition(towerLatLng).SetTitle(tower.Name).SetSnippet(tower.ToString()).SetIcon(towerBD));
                 marker.SetAnchor(0.5f, 0.5f);
                 marker.Rotation = (float)tower.Weapon.Azimuth;
@@ -142,7 +143,7 @@ namespace CttApp
         {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.SetTitle("Start Game");
-            builder.SetMessage("Ready to go??");
+            builder.SetMessage($"{game.GetPlayer().Name}, Are you ready to go?");
             builder.SetPositiveButton("Yes", (sender, e) =>
             {
                 // Start the game timer
@@ -166,17 +167,21 @@ namespace CttApp
 
                 foreach (ShootingEntityHitResults hitResults in gameResult.HitResults)
                 {
-                    //BitmapDescriptor hitBD = BitmapDescriptorFactory.FromResource(Resource.Drawable.small_explosion_51);
+                    
                     Tower tower = (Tower)hitResults.Entity;
                     towerMarkers[tower.Index].Rotation = (float)hitResults.Entity.Weapon.Azimuth;
-                    if (hitResults.HitResults != null)
+                    if (hitResults.HitResults != null && hitResults.HitResults.Count>0)
                     {
-                        //remove previous hits
-                        foreach (Circle hitMarker in hitMarkers)
+                        //remove previous hits if the first shot was shot
+                        if(hitResults.HitResults[0].HitLocation !=null)
                         {
-                            hitMarker.Remove();
+                            foreach (Circle hitMarker in hitMarkers)
+                            {
+                                hitMarker.Remove();
+                            }
+                            hitMarkers.Clear();
                         }
-                        hitMarkers.Clear();
+                       
                         foreach (HitResult hit in hitResults.HitResults)
                         {
                             if (hit.HitLocation != null)
@@ -194,9 +199,7 @@ namespace CttApp
                         }
                     }
                 }
-                playersHealth.Text = $"{game.GetPlayer().Health}";
-                caloriesBurned.Text = $"{(int)game.GetPlayer().CaloriesBurned}";
-                updateTowerLabels();
+                
             }
 
             else
@@ -204,7 +207,7 @@ namespace CttApp
                 gameEnded = true;
                 if (gameResult.GetLeader() == GameResult.Leader.player)
                 {
-                    Toast.MakeText(this, "Congartulations, you've won", ToastLength.Long).Show();
+                    Toast.MakeText(this, $"Congartulations {game.GetPlayer().Name}, you've won", ToastLength.Long).Show();
                 }
                 else if (gameResult.GetLeader() == GameResult.Leader.computer)
                 {
@@ -219,6 +222,11 @@ namespace CttApp
                 SetResult(Result.Ok, returnIntent);
                 Finish();*/
             }
+
+            playersHealth.Text = $"{(int)game.GetPlayer().Health}";
+            caloriesBurned.Text = $"{(int)game.GetPlayer().CaloriesBurned}";
+            updateTowerLabels();
+            CheckWeaponCanShoot();
         }
         public void OnLocationChanged(Android.Locations.Location location)
         {
@@ -228,7 +236,7 @@ namespace CttApp
                 
                 lastKnownLocation = location;
 
-                Location centerLocation = new Location(location.Latitude, location.Longitude, location.Altitude);
+                Location centerLocation = new Location(location.Latitude, location.Longitude);
 
                 if (this.game == null && !gameStarted && !gameEnded)
                 {
@@ -249,7 +257,7 @@ namespace CttApp
 
         private class GamePlayCountDownCounter : CountDownTimer
         {
-            PlayGameActivity activity;
+            readonly PlayGameActivity activity;
             public override void OnFinish()
             {
                 activity.timeLabel.Text = "Time Left: 00:00:00";
@@ -263,7 +271,11 @@ namespace CttApp
                 seconds = seconds % 60;                            // Remaining seconds
 
                 // Format the string as HH:mm:ss
-                activity.timeLabel.Text = "Time Left: " + $"{hours:00}:{minutes:00}:{seconds:00}";
+                if (!this.activity.gameEnded)
+                {
+                    activity.timeLabel.Text = "Time Left: " + $"{hours:00}:{minutes:00}:{seconds:00}";
+                }
+                
                 if (activity.lastKnownLocation != null)
                 {
                     activity.HandleGamePlay(activity.game.GetPlayer().Location);
@@ -321,7 +333,7 @@ namespace CttApp
 
             shootButton = FindViewById<FloatingActionButton>(Resource.Id.shootButton);
             aimButton = FindViewById<FloatingActionButton>(Resource.Id.aimButton);
-            pauseButton = FindViewById<FloatingActionButton>(Resource.Id.pauseButton);
+            
             stopButton = FindViewById<FloatingActionButton>(Resource.Id.stopButton);
             timeLabel = FindViewById<TextView>(Resource.Id.timeLabel);
 
@@ -331,7 +343,7 @@ namespace CttApp
 
             shootButton.Click += ShootButton_Click;
             aimButton.Click += AimButton_Click;
-            pauseButton.Click += PauseButton_Click;
+            
             stopButton.Click += StopButton_Click;
         }
 
@@ -343,7 +355,7 @@ namespace CttApp
                 {
                     playerHitMarker.Remove();
                 }
-                List<HitResult> hitResults = game.GetPlayer().Weapon.Fire(new List<Entity>(game.GetTowers()), new Shell());
+                List<HitResult> hitResults = game.GetPlayer().Weapon.Fire(new List<Entity>(game.GetTowers()), new Shell((GameConstants.PlayerHealth/this.game.GetTowers().Count)/3, GameConstants.PlayerShellDamageRadius));
                 if (hitResults != null)
                 {
                     foreach (HitResult hit in hitResults)
@@ -363,7 +375,7 @@ namespace CttApp
                     updateTowerLabels();
                     //RemoveHitMarkersAfterDelay();
                 }
-                towersHealth.Text= $"{game.GetTowersHealth()}";
+                towersHealth.Text= $"{(int)game.GetTowersHealth()}";
             }
         }
 
@@ -400,7 +412,8 @@ namespace CttApp
         {
             // Customize your map here
             googleMap.MapType = GoogleMap.MapTypeNormal;
-            googleMap.MyLocationEnabled = true;
+            googleMap.BuildingsEnabled = true;
+            //googleMap.MyLocationEnabled = true;
 
             //add info window
             googleMap.SetInfoWindowAdapter(new CustomInfoWindowAdapter(LayoutInflater.From(this)));
@@ -416,10 +429,7 @@ namespace CttApp
             StartActivityForResult(intent, AimRequestCode);
         }
 
-        private void PauseButton_Click(object sender, System.EventArgs e)
-        {
-            // Implement action for pause button
-        }
+        
 
         private void StopButton_Click(object sender, System.EventArgs e)
         {
@@ -463,6 +473,15 @@ namespace CttApp
         {
             base.OnLowMemory();
             mapView.OnLowMemory();
+        }
+
+        private void CheckWeaponCanShoot()
+        {
+            RunOnUiThread(() => {
+                bool canShoot = game.GetPlayer().Weapon.CanShoot() && !game.GameEnded;
+                shootButton.Clickable = canShoot;
+                shootButton.Alpha = canShoot ? 1f : 0.5f;
+            });
         }
 
 

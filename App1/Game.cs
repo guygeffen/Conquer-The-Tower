@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Android.Gms.Maps.Model;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -11,8 +12,8 @@ namespace CttApp
         private readonly List<Tower> _towers;
         private double _startTime;
         private readonly double _timeLimitInMinutes;
-        static private readonly double towerAimingTime = 1;
-        static private readonly double towerAngleChangeStep = 2;
+        
+        public bool GameEnded { get; private set; }
         
 
         public Game(Location centralLocation, double playerHealth, Weapon playerWeapon, UserProfile user,
@@ -24,6 +25,7 @@ namespace CttApp
             _towers = new List<Tower>();
             _towers.AddRange(towers);
             _timeLimitInMinutes = timeLimitInMinutes;
+            GameEnded = false;
         }
 
         public void StartGame()
@@ -44,24 +46,23 @@ namespace CttApp
             return _player;
         }
 
-        public static async Task<Game> CreateAsync(Location centralLocation, double playerHealth, UserProfile user,
+        public static Game Create(Location centralLocation, double playerHealth, UserProfile user,
                     int numTowers, double gameRadius,
-                    double timeLimitInMinutes)
+                    double timeLimitInMinutes, int range)
         {
-           
+
             List<Tower> towers = new List<Tower>();
-            double towerRange = gameRadius; //(gameRadius *0.5/ numTowers) * 0.5;
+           
             double towerHealth = playerHealth / numTowers;
             Random random = new Random();
-            double randomAngle = random.NextDouble() * 360;
-            double randomInclination = random.NextDouble() * 90;
-            Weapon playerWeapon = new Weapon(towerRange*1.1, randomAngle, randomInclination);
+            
+            Weapon playerWeapon = new Weapon(range, 0, 0, GameConstants.PlayerRoundsPerMinute);
             for (int i = 0; i < numTowers; i++)
             {
-                randomAngle = random.NextDouble() * 360;
-                randomInclination = random.NextDouble() * 90;
-                Weapon towerWeapon = new Weapon(towerRange, randomAngle, randomInclination);
-                Tower tower = await CreateRandomTowerAsync(i,centralLocation, towerHealth, towerWeapon, gameRadius, towerRange*1.25);
+                double randomAngle = random.NextDouble() * 360;
+                double randomInclination = random.NextDouble() * 90;
+                Weapon towerWeapon = new Weapon(range, randomAngle, randomInclination, GameConstants.TowerRoundsPerMinute);
+                Tower tower = CreateRandomTower(i,centralLocation, towerHealth, towerWeapon, gameRadius, range);
 
                 towers.Add(tower);
             }
@@ -70,26 +71,26 @@ namespace CttApp
         }
 
 
-        private static async Task<Tower> CreateRandomTowerAsync(int index,Location center, double health, Weapon weapon, double radius, double radarRadius)
+        private static  Tower CreateRandomTower(int index,Location center, double health, Weapon weapon, double radius, double radarRadius)
         {
             Random random = new Random();
             double randomAngle = random.NextDouble() * 360; // Generate random angle in degrees
             double distance = random.NextDouble() * radius; // Generate random distance within radius
 
-            double newLatitude = center.Latitude + Math.Cos(randomAngle * Math.PI / 180) * (distance / 111111); // Convert distance to latitude offset
-            double newLongitude = center.Longitude + Math.Sin(randomAngle * Math.PI / 180) * (distance / (111111 * Math.Cos(center.Latitude * Math.PI / 180))); // Convert distance to longitude offset
 
-            ElevationService elevationService = new ElevationService();
+            LatLng towerLatLng = SphericalUtil.ComputeOffset(center.GetLatLng(), distance, randomAngle);
+
+                   /*ElevationService elevationService = new ElevationService();
             double? newAltitude = await elevationService.GetElevationAsync(newLatitude, newLongitude);
             newAltitude = newAltitude ?? center.Altitude; // Use center altitude if no data available
-
-            Location newLocation = new Location(newLatitude, newLongitude, newAltitude.Value);
-            return new Tower(index,newLocation, health, weapon, radarRadius, towerAngleChangeStep, towerAimingTime);
+            */
+            Location newLocation = new Location(towerLatLng.Latitude, towerLatLng.Longitude);
+            return new Tower(index,newLocation, health, weapon, radarRadius, GameConstants.towerAngleChangeStep, GameConstants.towerAimingTime);
         }
 
         public GameResult Update(Location currentPlayerLocation)
         {
-            Location previousLocation = _player.Location;
+            
             _player.Location = currentPlayerLocation; // Update player location based on GPS
             
 
@@ -102,13 +103,17 @@ namespace CttApp
             // Check for win/lose conditions (e.g., player health, remaining towers, time limit)
             double towerHealth = GetTowersHealth();
             double playerHealth = _player.Health;
-            bool gameEnded = false;
+            
             if (IsTimeLimitReached() || towerHealth <= 0 || playerHealth<=0)
             {
-                gameEnded = true;
+                // Debugging information
+                Console.WriteLine($"Player Health: {playerHealth}");
+                Console.WriteLine($"Tower Health: {towerHealth}");
+                Console.WriteLine($"Time Left: {GetTimeLeftInMinutes()}");
+                GameEnded = true;
             }
 
-            return new GameResult(gameEnded, playerHealth, towerHealth, hitResults);
+            return new GameResult(GameEnded, playerHealth, towerHealth, hitResults);
         }
 
         public double GetTowersHealth()

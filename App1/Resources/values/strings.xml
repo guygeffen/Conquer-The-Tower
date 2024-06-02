@@ -25,5 +25,5 @@
 	<string name="num_of_towers_label">Number of Towers:</string>
 	<string name="new_game_settings_label">New Game Settings</string>
 	<string name="cancel_button">Cancel</string>
-	
+	<string name="range_label">Range(meter):</string>
 </resources>
