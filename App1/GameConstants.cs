@@ -20,7 +20,7 @@ namespace CttApp
         public const int TowerRoundsPerMinute = 10;
         public const double PlayerShellDamageRadius=20;
         
-        public const double towerAimingTime = 0.1;
+        public const double towerAimingTime = 1;
         public const double towerAngleChangeStep = 2;
     }
 }

@@ -1,7 +1,6 @@
 ﻿using Android.Gms.Maps.Model;
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace CttApp
 {
@@ -12,9 +11,9 @@ namespace CttApp
         private readonly List<Tower> _towers;
         private double _startTime;
         private readonly double _timeLimitInMinutes;
-        
+
         public bool GameEnded { get; private set; }
-        
+
 
         public Game(Location centralLocation, double playerHealth, Weapon playerWeapon, UserProfile user,
                     List<Tower> towers, double gameRadius,
@@ -31,11 +30,11 @@ namespace CttApp
         public void StartGame()
         {
             _startTime = GetCurrentTimeInMinutes(); // Capture start time
-            _player.startCalorieTracking();
+            _player.StartCalorieTracking();
         }
-        
 
-        public List<Tower> GetTowers() 
+
+        public List<Tower> GetTowers()
         {
             return _towers;
         }
@@ -52,26 +51,26 @@ namespace CttApp
         {
 
             List<Tower> towers = new List<Tower>();
-           
+
             double towerHealth = playerHealth / numTowers;
             Random random = new Random();
-            
+
             Weapon playerWeapon = new Weapon(range, 0, 0, GameConstants.PlayerRoundsPerMinute);
             for (int i = 0; i < numTowers; i++)
             {
                 double randomAngle = random.NextDouble() * 360;
                 double randomInclination = random.NextDouble() * 90;
                 Weapon towerWeapon = new Weapon(range, randomAngle, randomInclination, GameConstants.TowerRoundsPerMinute);
-                Tower tower = CreateRandomTower(i,centralLocation, towerHealth, towerWeapon, gameRadius, range);
+                Tower tower = CreateRandomTower(i, centralLocation, towerHealth, towerWeapon, gameRadius, range);
 
                 towers.Add(tower);
             }
-           
-            return new Game(centralLocation, playerHealth, playerWeapon, user, towers,gameRadius, timeLimitInMinutes);
+
+            return new Game(centralLocation, playerHealth, playerWeapon, user, towers, gameRadius, timeLimitInMinutes);
         }
 
 
-        private static  Tower CreateRandomTower(int index,Location center, double health, Weapon weapon, double radius, double radarRadius)
+        private static Tower CreateRandomTower(int index, Location center, double health, Weapon weapon, double radius, double radarRadius)
         {
             Random random = new Random();
             double randomAngle = random.NextDouble() * 360; // Generate random angle in degrees
@@ -80,19 +79,15 @@ namespace CttApp
 
             LatLng towerLatLng = SphericalUtil.ComputeOffset(center.GetLatLng(), distance, randomAngle);
 
-                   /*ElevationService elevationService = new ElevationService();
-            double? newAltitude = await elevationService.GetElevationAsync(newLatitude, newLongitude);
-            newAltitude = newAltitude ?? center.Altitude; // Use center altitude if no data available
-            */
             Location newLocation = new Location(towerLatLng.Latitude, towerLatLng.Longitude);
-            return new Tower(index,newLocation, health, weapon, radarRadius, GameConstants.towerAngleChangeStep, GameConstants.towerAimingTime);
+            return new Tower(index, newLocation, health, weapon, radarRadius, GameConstants.towerAngleChangeStep, GameConstants.towerAimingTime);
         }
 
         public GameResult Update(Location currentPlayerLocation)
         {
-            
+
             _player.Location = currentPlayerLocation; // Update player location based on GPS
-            
+
 
             List<ShootingEntityHitResults> hitResults = new List<ShootingEntityHitResults>();
             foreach (Tower tower in _towers)
@@ -103,23 +98,23 @@ namespace CttApp
             // Check for win/lose conditions (e.g., player health, remaining towers, time limit)
             double towerHealth = GetTowersHealth();
             double playerHealth = _player.Health;
-            
-            if (IsTimeLimitReached() || towerHealth <= 0 || playerHealth<=0)
+
+            if (IsTimeLimitReached() || towerHealth <= 0 || playerHealth <= 0)
             {
                 // Debugging information
                 Console.WriteLine($"Player Health: {playerHealth}");
                 Console.WriteLine($"Tower Health: {towerHealth}");
-                Console.WriteLine($"Time Left: {GetTimeLeftInMinutes()}");
+
                 GameEnded = true;
             }
-
+            Console.WriteLine($"Time Left: {GetTimeLeftInMinutes()}");
             return new GameResult(GameEnded, playerHealth, towerHealth, hitResults);
         }
 
         public double GetTowersHealth()
         {
-            double towerHealth=0;
-            foreach(Tower tower in _towers)
+            double towerHealth = 0;
+            foreach (Tower tower in _towers)
             {
                 towerHealth += tower.Health;
             }
@@ -142,8 +137,8 @@ namespace CttApp
 
         private bool IsTimeLimitReached()
         {
-           
-            return GetTimeLeftInMinutes()<=0;
+
+            return GetTimeLeftInMinutes() <= 0;
         }
     }
 
@@ -177,18 +172,18 @@ namespace CttApp
 
         public List<ShootingEntityHitResults> HitResults => _hitResults;
 
-        public bool IsGameEnded() 
+        public bool IsGameEnded()
         {
             return _gameEnded;
         }
         public Leader GetLeader()
         {
             Leader result = Leader.tie;
-            if (PlayerScore> TowerScore)
+            if (PlayerScore > TowerScore)
             {
                 result = Leader.player;
             }
-            else if(TowerScore> PlayerScore)
+            else if (TowerScore > PlayerScore)
             {
                 result = Leader.computer;
             }

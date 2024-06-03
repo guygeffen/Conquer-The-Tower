@@ -59,7 +59,7 @@ namespace CttApp
                     List<Entity> targets = new List<Entity>() { player };
 
                     double angleDifference = GetWeaponAngleDifference(player);
-                    double? inclinationDifference = GetInclinationDifference(player, shell);
+                    double? inclinationDifference = GetInclinationDifference(player);
 
                     if (Math.Abs(angleDifference) > _weaponTurnSpeed)
                     {
@@ -142,7 +142,7 @@ namespace CttApp
         /// <param name="player">The player to hit.</param>
         /// <param name="shell">The shell to be fired.</param>
         /// <returns>The difference in weapon inclination.</returns>
-        private double? GetInclinationDifference(Player player, Shell shell)
+        private double? GetInclinationDifference(Player player)
         {
             double? requiredInclination = Weapon.CalculateRequiredInclination(player.Location);
             return requiredInclination - Weapon.Inclination;

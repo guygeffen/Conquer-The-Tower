@@ -89,7 +89,6 @@
     <Compile Include="UserProfileActivity.cs" />
     <Compile Include="UserProfile.cs" />
     <Compile Include="UserProfileDbHelper.cs" />
-    <Compile Include="Utils.cs" />
     <Compile Include="Weapon.cs" />
   </ItemGroup>
   <ItemGroup>

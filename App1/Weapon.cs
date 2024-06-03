@@ -127,7 +127,7 @@ namespace CttApp
             List<HitResult> hitResults = new List<HitResult>();
 
             double radInclination = DegToRad(Inclination);
-            double radAzimuth = DegToRad(Azimuth);
+            
 
             double timeOfFlight = (2 * initialSpeed * Math.Sin(radInclination)) / gravity;
 

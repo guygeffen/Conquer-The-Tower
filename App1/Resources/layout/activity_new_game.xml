@@ -10,6 +10,14 @@
         android:padding="@dimen/margin_medium">
 
         <TextView
+            android:id="@+id/currentUserProfile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Current User: "
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:layout_marginBottom="@dimen/margin_medium" />
+
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/new_game_settings_label"
@@ -54,6 +62,7 @@
             android:layout_height="wrap_content"
             android:inputType="number"
             android:layout_marginBottom="@dimen/margin_medium" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -66,6 +75,7 @@
             android:layout_height="wrap_content"
             android:inputType="number"
             android:layout_marginBottom="@dimen/margin_medium" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

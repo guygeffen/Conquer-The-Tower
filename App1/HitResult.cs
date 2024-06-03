@@ -11,7 +11,6 @@ namespace CttApp
         public Location HitLocation { get; private set; }
 
 
-        //public Shell Projectile { get => Projectile; set => Projectile = value; }
 
         public double HitRadius { get; set; }
 
@@ -25,7 +24,6 @@ namespace CttApp
             HitTarget = target;
             HitLocation = hitLocation;
            
-            //Projectile = shell;
         }
   
     }

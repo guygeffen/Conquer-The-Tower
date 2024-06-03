@@ -5,6 +5,7 @@ namespace CttApp
 {
     public class UserProfile
     {
+        public static UserProfile selectedProfile = null;
         public UserProfile(string name, int age, string gender, double weight, int height)
         {
             Name = name;

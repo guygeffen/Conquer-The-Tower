@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using SQLite;
 
@@ -6,6 +7,7 @@ namespace CttApp
 {
     public class UserProfileDbHelper
     {
+        
         private static string _databasePath;
         private readonly SQLiteConnection _db;
         private static UserProfileDbHelper instance;
@@ -17,7 +19,7 @@ namespace CttApp
             _db = new SQLiteConnection(_databasePath); // Use CreateIfNotExists flag
             // Check if table exists before creating it
 
-            CreateTableResult t_result=_db.CreateTable<UserProfile>();
+            _db.CreateTable<UserProfile>();
 
             
         }
@@ -51,7 +53,16 @@ namespace CttApp
         public UserProfile GetUserProfile()
         {
             // Get the first user from the table, assuming only one user is stored
-            return _db.Table<UserProfile>().FirstOrDefault();
+            if(UserProfile.selectedProfile==null)
+            {
+                UserProfile.selectedProfile= _db.Table<UserProfile>().FirstOrDefault();
+            }
+            return UserProfile.selectedProfile;
+        }
+
+        public List<UserProfile> GetAllUserProfiles()
+        {
+            return _db.Table<UserProfile>().ToList();
         }
     }
 }

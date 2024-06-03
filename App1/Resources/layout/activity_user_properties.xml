@@ -12,6 +12,24 @@
     <TextView
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
+      android:text="Select User"
+      android:textAppearance="@style/custom_text_headline"/>
+
+    <Spinner
+      android:id="@+id/spinnerUsers"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"/>
+
+    <Button
+      android:id="@+id/btnNewUser"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="Create New User"/>
+
+    <!-- Existing layout code -->
+    <TextView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
       android:text="@string/user_information_title"
       android:textAppearance="@style/custom_text_headline"/>
 
@@ -72,8 +90,8 @@
       android:id="@+id/txtWeight"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:inputType="numberDecimal"
-      android:digits="0.0-9" />
+      android:inputType="number"
+      android:digits="0123456789" />
     <TextView
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"

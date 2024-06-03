@@ -7,16 +7,14 @@ using Android.Gms.Maps;
 using Android.Gms.Maps.Model;
 using Android.Locations;
 using Android.Content;
-using System.Threading.Tasks;
 using System.Collections.Generic;
-using System.Text.Json;
 using Android.Views;
 using Google.Android.Material.Snackbar;
 using AlertDialog = Android.App.AlertDialog;
 
 namespace CttApp
 {
-    [Activity(Label = "@string/app_name", Theme = "@style/AppTheme", MainLauncher = true)]
+    [Activity(Label = "@string/app_name", Theme = "@style/AppTheme")]
     public class PlayGameActivity : AppCompatActivity, IOnMapReadyCallback, ILocationListener
     {
         private MapView mapView;
@@ -37,7 +35,7 @@ namespace CttApp
         private readonly List<Marker> towerMarkers = new List<Marker>();
         private readonly List<Circle> hitMarkers = new List<Circle>();
         private Circle playerHitMarker;
-        //private FusedLocationProviderClient _locationProviderClient;
+        
         private Marker _currentLocationMarker;
         private GamePlayCountDownCounter countDownTimer;
         private Android.Locations.Location lastKnownLocation = null;
@@ -217,15 +215,12 @@ namespace CttApp
                 {
                     Toast.MakeText(this, "You tied, get untied!", ToastLength.Long).Show();
                 }
-                /*Intent returnIntent = new Intent();
-                returnIntent.PutExtra(GAME_RESULT, JsonSerializer.Serialize(gameResult));
-                SetResult(Result.Ok, returnIntent);
-                Finish();*/
             }
 
             playersHealth.Text = $"{(int)game.GetPlayer().Health}";
             caloriesBurned.Text = $"{(int)game.GetPlayer().CaloriesBurned}";
-            updateTowerLabels();
+            UpdateTowerLabels();
+            UpdateMyLocationUI(lastKnownLocation);
             CheckWeaponCanShoot();
         }
         public void OnLocationChanged(Android.Locations.Location location)
@@ -237,19 +232,14 @@ namespace CttApp
                 lastKnownLocation = location;
 
                 Location centerLocation = new Location(location.Latitude, location.Longitude);
-
                 if (this.game == null && !gameStarted && !gameEnded)
                 {
                     InitializeGame(location);
-
                 }
                 else if (!gameEnded)
                 {
-
                     HandleGamePlay(centerLocation);
-                    UpdateMyLocationUI(location);
                     RequestLocationUpdates();
-
                 }
             }
         }
@@ -268,7 +258,7 @@ namespace CttApp
                 int seconds = (int)(millisUntilFinished / 1000);  // Convert milliseconds to seconds
                 int hours = seconds / 3600;                        // Convert seconds to hours
                 int minutes = (seconds % 3600) / 60;               // Convert remainder to minutes
-                seconds = seconds % 60;                            // Remaining seconds
+                seconds %= 60;                            // Remaining seconds
 
                 // Format the string as HH:mm:ss
                 if (!this.activity.gameEnded)
@@ -372,14 +362,13 @@ namespace CttApp
                         }
 
                     }
-                    updateTowerLabels();
-                    //RemoveHitMarkersAfterDelay();
+                    UpdateTowerLabels();
                 }
                 towersHealth.Text= $"{(int)game.GetTowersHealth()}";
             }
         }
 
-        private void updateTowerLabels()
+        private void UpdateTowerLabels()
         {
             for (int i = 0; i < towerMarkers.Count; i++)
             {
@@ -412,8 +401,7 @@ namespace CttApp
         {
             // Customize your map here
             googleMap.MapType = GoogleMap.MapTypeNormal;
-            googleMap.BuildingsEnabled = true;
-            //googleMap.MyLocationEnabled = true;
+            //googleMap.BuildingsEnabled = true;
 
             //add info window
             googleMap.SetInfoWindowAdapter(new CustomInfoWindowAdapter(LayoutInflater.From(this)));

@@ -24,12 +24,12 @@ namespace CttApp
             if (lastUpdate!=0 && GetTimeInSecondsSinceUpdate()>2)
             {
                 CaloriesBurned += calorieCalculator.CalculateCaloriesBurned(newLocation, oldLocation, GetTimeInSecondsSinceUpdate());
-                startCalorieTracking();
+                StartCalorieTracking();
             }
             
             base.LocationChanged(oldLocation, newLocation);
         }
-        public void startCalorieTracking()
+        public void StartCalorieTracking()
         {
             lastUpdate = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
         }
