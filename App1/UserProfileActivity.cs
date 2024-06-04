@@ -8,6 +8,9 @@ using System.Linq;
 
 namespace CttApp
 {
+    /// <summary>
+    /// Activity for managing user profiles.
+    /// </summary>
     [Activity(Label = "UserProfileActivity")]
     public class UserProfileActivity : Activity
     {
@@ -20,6 +23,10 @@ namespace CttApp
         private UserProfileDbHelper _dbHelper;
         private List<UserProfile> _userProfiles;
 
+        /// <summary>
+        /// Called when the activity is first created.
+        /// </summary>
+        /// <param name="savedInstanceState">The saved instance state.</param>
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
@@ -57,6 +64,9 @@ namespace CttApp
             btnBack.Click += BtnBack_Click;
         }
 
+        /// <summary>
+        /// Loads user profiles from the database and populates the Spinner.
+        /// </summary>
         private void LoadUserProfiles()
         {
             _userProfiles = _dbHelper.GetAllUserProfiles();
@@ -68,6 +78,9 @@ namespace CttApp
             spinnerUsers.Adapter = adapter;
         }
 
+        /// <summary>
+        /// Handles the event when a user is selected from the Spinner.
+        /// </summary>
         private void SpinnerUsers_ItemSelected(object sender, AdapterView.ItemSelectedEventArgs e)
         {
             if (e.Position == 0)
@@ -83,14 +96,21 @@ namespace CttApp
             }
         }
 
+        /// <summary>
+        /// Handles the new user button click event.
+        /// </summary>
         private void BtnNewUser_Click(object sender, EventArgs e)
         {
             ClearInputFields();
             spinnerUsers.SetSelection(0); // Reset Spinner selection
         }
+
+        /// <summary>
+        /// Handles the back button click event.
+        /// </summary>
         private void BtnBack_Click(object sender, EventArgs e)
         {
-            UserProfile.selectedProfile= GetUserProfileFromView();
+            UserProfile.selectedProfile = GetUserProfileFromView();
             // Optionally, send data back to MainActivity
             Intent intent = new Intent();
             intent.PutExtra("message", "User profile Selected!"); // Example: send a message back to MainActivity
@@ -99,6 +119,10 @@ namespace CttApp
             Finish(); // Close this activity
         }
 
+        /// <summary>
+        /// Retrieves the user profile data from the input fields.
+        /// </summary>
+        /// <returns>The user profile object.</returns>
         private UserProfile GetUserProfileFromView()
         {
             try
@@ -133,9 +157,11 @@ namespace CttApp
             }
         }
 
+        /// <summary>
+        /// Handles the save button click event.
+        /// </summary>
         private void BtnSave_Click(object sender, EventArgs e)
         {
-           
             // Save user profile to database
             _dbHelper.SaveUserProfile(GetUserProfileFromView());
 
@@ -147,6 +173,9 @@ namespace CttApp
             Finish(); // Close this activity
         }
 
+        /// <summary>
+        /// Clears the input fields.
+        /// </summary>
         private void ClearInputFields()
         {
             txtName.Text = "";
@@ -156,6 +185,10 @@ namespace CttApp
             txtHeight.Text = "";
         }
 
+        /// <summary>
+        /// Populates the input fields with the details of the selected user profile.
+        /// </summary>
+        /// <param name="profile">The user profile object.</param>
         private void PopulateUserDetails(UserProfile profile)
         {
             txtName.Text = profile.Name;

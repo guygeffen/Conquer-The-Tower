@@ -109,24 +109,6 @@
     <AndroidResource Include="Resources\values\strings.xml" />
     <AndroidResource Include="Resources\values\styles.xml" />
     <AndroidResource Include="Resources\menu\menu_main.xml" />
-    <AndroidResource Include="Resources\mipmap-hdpi\ic_launcher.png" />
-    <AndroidResource Include="Resources\mipmap-hdpi\ic_launcher_foreground.png" />
-    <AndroidResource Include="Resources\mipmap-hdpi\ic_launcher_round.png" />
-    <AndroidResource Include="Resources\mipmap-mdpi\ic_launcher.png" />
-    <AndroidResource Include="Resources\mipmap-mdpi\ic_launcher_foreground.png" />
-    <AndroidResource Include="Resources\mipmap-mdpi\ic_launcher_round.png" />
-    <AndroidResource Include="Resources\mipmap-xhdpi\ic_launcher.png" />
-    <AndroidResource Include="Resources\mipmap-xhdpi\ic_launcher_foreground.png" />
-    <AndroidResource Include="Resources\mipmap-xhdpi\ic_launcher_round.png" />
-    <AndroidResource Include="Resources\mipmap-xxhdpi\ic_launcher.png" />
-    <AndroidResource Include="Resources\mipmap-xxhdpi\ic_launcher_foreground.png" />
-    <AndroidResource Include="Resources\mipmap-xxhdpi\ic_launcher_round.png" />
-    <AndroidResource Include="Resources\mipmap-xxxhdpi\ic_launcher.png" />
-    <AndroidResource Include="Resources\mipmap-xxxhdpi\ic_launcher_foreground.png" />
-    <AndroidResource Include="Resources\mipmap-xxxhdpi\ic_launcher_round.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\ic_crosshair.xml" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="sqlite-net-pcl">
@@ -174,30 +156,21 @@
     </AndroidResource>
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable\blue_tank_55.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\blue_tank_110.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\small_explosion_51.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\tower__red_55.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\tower__red_110.png" />
-  </ItemGroup>
-  <ItemGroup>
     <AndroidResource Include="Resources\layout\custom_info_window.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable\cannon_shoot.png" />
+    <AndroidResource Include="Resources\drawable\blue_tank_55.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable\ctt_image.png" />
+    <AndroidResource Include="Resources\drawable\cannon_shoot.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\ctt_image.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\tower__red_55.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <ProjectExtensions>

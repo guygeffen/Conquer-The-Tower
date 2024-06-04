@@ -4,10 +4,12 @@ using Android.OS;
 using Android.Widget;
 using AndroidX.AppCompat.App;
 using System;
-using System.Linq;
 
 namespace CttApp
 {
+    /// <summary>
+    /// Activity for setting up a new game.
+    /// </summary>
     [Activity(Label = "New Game")]
     public class NewGameActivity : AppCompatActivity
     {
@@ -24,6 +26,10 @@ namespace CttApp
         public const string range_key = "Range";
         private UserProfileDbHelper _dbHelper;
 
+        /// <summary>
+        /// Called when the activity is first created.
+        /// </summary>
+        /// <param name="savedInstanceState">The saved instance state.</param>
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
@@ -51,6 +57,9 @@ namespace CttApp
             LoadCurrentUserProfile();
         }
 
+        /// <summary>
+        /// Loads the current user profile and displays it.
+        /// </summary>
         private void LoadCurrentUserProfile()
         {
             var userProfile = _dbHelper.GetUserProfile();
@@ -64,6 +73,9 @@ namespace CttApp
             }
         }
 
+        /// <summary>
+        /// Shows an alert dialog if no user profile is found.
+        /// </summary>
         private void ShowNoUserAlert()
         {
             AndroidX.AppCompat.App.AlertDialog.Builder alert = new AndroidX.AppCompat.App.AlertDialog.Builder(this);
@@ -79,6 +91,9 @@ namespace CttApp
             alert.Show();
         }
 
+        /// <summary>
+        /// Handles the cancel button click event.
+        /// </summary>
         private void OnCancelButtonClicked(object sender, EventArgs e)
         {
             Intent intent = new Intent();
@@ -86,6 +101,9 @@ namespace CttApp
             Finish(); // Close this activity
         }
 
+        /// <summary>
+        /// Handles the start game button click event.
+        /// </summary>
         private void OnStartGameButtonClicked(object sender, EventArgs e)
         {
             // Validate and parse user input
